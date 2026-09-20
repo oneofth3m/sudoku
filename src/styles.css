@@ -1,0 +1,588 @@
+:root {
+  --bg: #f4f7fb;
+  --panel: #ffffff;
+  --ink: #1f2937;
+  --muted: #6b7280;
+  --line: #c9d3e2;
+  --line-strong: #27344d;
+  --accent: #2563eb;
+  --danger: #dc2626;
+  --danger-bg: #fee2e2;
+  --select-bg: #dbeafe;
+  --region-bg: #f3f7ff;
+  --same-bg: #bcdafd;
+  --mark: #5b6b84;
+  --center-mark: #0e7490;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+.app {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 20px 16px 48px;
+}
+
+.app-header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.app-title {
+  margin: 0;
+  font-size: 28px;
+  letter-spacing: 0.04em;
+}
+
+.app-subtitle {
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ---------- Toolbar ---------- */
+
+.toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+}
+
+.toolbar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toolbar-row.wrap {
+  flex-wrap: wrap;
+}
+
+.btn {
+  font: inherit;
+  font-size: 14px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--region-bg);
+  border-color: var(--line-strong);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.select {
+  font: inherit;
+  font-size: 14px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.mode-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mode-btn {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 7px 3px;
+  min-width: 46px;
+  min-height: 34px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mode-btn.active {
+  background: var(--select-bg);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.mode-label {
+  font-size: 13px;
+  color: var(--muted);
+  margin-left: 4px;
+}
+
+/* Corner-mark button: a tiny 3x3 digit grid, visually distinct from center. */
+.mini-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 9px);
+  grid-template-rows: repeat(3, 9px);
+}
+
+.mini-grid i {
+  font-style: normal;
+  font-size: 7px;
+  line-height: 9px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* ---------- Status bar ---------- */
+
+.status {
+  display: flex;
+  gap: 28px;
+  margin-bottom: 14px;
+  padding: 0 4px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.stat-value {
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+/* ---------- Layout ---------- */
+
+.layout {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.board-wrap {
+  flex: 0 0 auto;
+}
+
+.controls {
+  flex: 0 0 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ---------- Board ---------- */
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  grid-template-rows: repeat(9, 1fr);
+  width: min(92vw, 540px);
+  aspect-ratio: 1;
+  border: 2px solid var(--line-strong);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--panel);
+  box-shadow: 0 6px 18px rgba(31, 41, 55, 0.08);
+  user-select: none;
+}
+
+.cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  cursor: default;
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+}
+
+.cell[data-c='2'],
+.cell[data-c='5'] {
+  border-right: 2px solid var(--line-strong);
+}
+
+.cell[data-c='8'] {
+  border-right: none;
+}
+
+.cell[data-r='2'],
+.cell[data-r='5'] {
+  border-bottom: 2px solid var(--line-strong);
+}
+
+.cell[data-r='8'] {
+  border-bottom: none;
+}
+
+.cell.region {
+  background: var(--region-bg);
+}
+
+.cell.selected {
+  background: var(--select-bg);
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+.cell.same-value {
+  background: var(--same-bg);
+}
+
+.cell.conflict .value {
+  color: var(--danger);
+}
+
+.cell.conflict {
+  background: var(--danger-bg);
+}
+
+/* A placed value that does not match the unique solution (even when it
+   conflicts with nothing) is struck through in red. */
+.cell.wrong .value {
+  color: var(--danger);
+  text-decoration: line-through;
+}
+
+.cell.wrong {
+  background: #fff3f2;
+}
+
+.cell .value {
+  font-size: clamp(14px, 4.4vmin, 30px);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.cell.given .value {
+  color: var(--ink);
+}
+
+.cell.user .value {
+  color: var(--accent);
+}
+
+.corner-marks {
+  position: absolute;
+  inset: 1px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  pointer-events: none;
+}
+
+.corner-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(6px, 1.5vmin, 10px);
+  line-height: 1;
+  font-weight: 600;
+  color: var(--mark);
+}
+
+.center-marks {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50%;
+  height: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  background: var(--panel);
+  border-radius: 4px;
+  box-shadow: 0 0 0 1px rgba(31, 41, 55, 0.12), 0 1px 3px rgba(31, 41, 55, 0.15);
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.center-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(5px, 1.6vmin, 9px);
+  line-height: 1;
+  color: var(--center-mark);
+  font-weight: 700;
+}
+
+/* Corner mark 5 rendered inside the center chip: kept at full corner size and
+   drawn as a white badge with a ring so it is clearly visible and distinct
+   from the surrounding center marks (which are teal and slightly smaller). */
+.center-marks .corner-mark.chip-corner {
+  font-size: clamp(6.5px, 1.7vmin, 10px);
+  font-weight: 700;
+  color: var(--mark);
+  background: var(--panel);
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(91, 107, 132, 0.55);
+}
+
+.corner-mark.invalid,
+.center-mark.invalid {
+  color: var(--danger);
+  background: var(--danger-bg);
+  border-radius: 3px;
+}
+
+/* ---------- Keypad ---------- */
+
+.keypad-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.key {
+  font: inherit;
+  padding: 8px 0;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.12s ease, transform 0.05s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+}
+
+.key:hover {
+  background: var(--region-bg);
+}
+
+.key:active {
+  transform: scale(0.96);
+}
+
+.key-num {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.key-remaining {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.key.zero-remaining .key-remaining {
+  color: var(--danger);
+}
+
+.key.zero-remaining .key-num {
+  opacity: 0.4;
+}
+
+.key-erase {
+  font-size: 16px;
+  color: var(--danger);
+}
+
+.keypad-hint,
+.keyboard-hint {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.keyboard-help {
+  font-size: 13px;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--panel);
+  padding: 8px 12px;
+}
+
+.keyboard-help summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.keyboard-help ul {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 4px;
+}
+
+/* ---------- Board link (debug) ---------- */
+
+.board-link {
+  font-size: 13px;
+  color: var(--muted);
+  border: 1px dashed var(--line);
+  border-radius: 10px;
+  background: var(--panel);
+  padding: 8px 12px;
+}
+
+.board-link summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.board-link-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.board-link-input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  font-size: 12px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  background: #fff;
+}
+
+.board-link-note {
+  margin: 8px 0 0;
+  font-size: 12px;
+}
+
+.copied-hint {
+  color: #15803d;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ---------- Win overlay ---------- */
+
+.incomplete-banner {
+  margin: 0 0 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #fca5a5;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 14px;
+  text-align: center;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(31, 41, 55, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.overlay-card {
+  background: var(--panel);
+  border-radius: 16px;
+  padding: 32px 40px;
+  min-width: 280px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.overlay-title {
+  margin: 0 0 18px;
+  font-size: 24px;
+}
+
+.overlay-stats {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin: 0 0 22px;
+}
+
+.overlay-stats div {
+  display: flex;
+  flex-direction: column;
+}
+
+.overlay-stats dt {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.overlay-stats dd {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 640px) {
+  .controls {
+    flex-basis: 100%;
+    max-width: 340px;
+  }
+}

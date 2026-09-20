@@ -175,6 +175,7 @@ body {
 /* Icon-only tool buttons */
 .icon-btn {
   font: inherit;
+  position: relative;
   width: 34px;
   height: 34px;
   border: none;
@@ -186,6 +187,34 @@ body {
   align-items: center;
   justify-content: center;
   transition: background 0.13s ease, color 0.13s ease;
+}
+
+/* Custom tooltip (avoids the slow, unstyled native `title` popup). */
+.icon-btn::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 9px);
+  left: 50%;
+  transform: translateX(-50%) translateY(3px);
+  padding: 5px 9px;
+  border-radius: 6px;
+  background: #23304b;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.25;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease, transform 0.12s ease;
+  box-shadow: 0 2px 8px rgba(20, 28, 45, 0.28);
+  z-index: 30;
+}
+
+.icon-btn:hover:not(:disabled)::after,
+.icon-btn:focus-visible:not(:disabled)::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
 .icon-btn:hover:not(:disabled) {
@@ -597,13 +626,6 @@ body {
   color: var(--danger);
   border-color: var(--danger);
   background: var(--danger-soft);
-}
-
-.keyboard-hint {
-  margin: 0;
-  font-size: 11.5px;
-  color: var(--muted);
-  text-align: center;
 }
 
 /* ---------- Keyboard help ---------- */

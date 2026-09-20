@@ -243,7 +243,7 @@ export default function App() {
             onErase={erase}
             onModeChange={onModeChange}
           />
-          <details className="keyboard-help">
+          <details className="keyboard-help" open>
             <summary>Shortcuts</summary>
             <ul>
               <li><b>1–9</b> enter / toggle the digit in the current mode</li>

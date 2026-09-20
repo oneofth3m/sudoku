@@ -21,6 +21,24 @@ test('ui audit: toolbar, keypad and erase-bar geometry', async ({ page }) => {
   const undoText = await page.locator('[data-testid="undo"]').innerText();
   expect(undoText.trim()).toBe('');
 
+  // 2b) Every icon button carries a clean tooltip that appears on hover.
+  const tips: Record<string, string> = {
+    undo: 'Undo last change',
+    redo: 'Redo last change',
+    'auto-fill': 'Auto-fill 1–9 center marks',
+    'clear-invalid': 'Clear invalid marks',
+    'clear-corners': 'Clear corner marks',
+    'clear-centers': 'Clear center marks',
+  };
+  for (const [id, tip] of Object.entries(tips)) {
+    await expect(page.locator(`[data-testid="${id}"]`)).toHaveAttribute('data-tip', tip);
+  }
+  const fill = page.locator('[data-testid="auto-fill"]');
+  await fill.hover();
+  await expect
+    .poll(() => fill.evaluate((el) => getComputedStyle(el, '::after').opacity))
+    .toBe('1');
+
   // 3) Erase bar is as wide as the keypad grid and spans all three columns.
   const erase = await page.locator('[data-testid="erase"]').boundingBox();
   const digit1 = await page.locator('[data-testid="key-1"]').boundingBox();

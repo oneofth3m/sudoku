@@ -71,8 +71,6 @@ export function Keypad({ mode, remaining, onDigit, onErase, onModeChange }: Keyp
           <IconBackspace />
         </button>
       </div>
-
-      <p className="keyboard-hint">1–9 enter · 0/⌫ erase · arrows move · V/C/M mode</p>
     </div>
   );
 }

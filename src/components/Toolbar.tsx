@@ -18,19 +18,19 @@ interface ToolbarProps {
 interface ToolButtonProps {
   testId: string;
   label: string;
-  title: string;
+  tip: string;
   disabled?: boolean;
   onClick: () => void;
   icon: React.ReactNode;
 }
 
-function ToolButton({ testId, label, title, disabled, onClick, icon }: ToolButtonProps) {
+function ToolButton({ testId, label, tip, disabled, onClick, icon }: ToolButtonProps) {
   return (
     <button
       type="button"
       className="icon-btn"
       data-testid={testId}
-      title={title}
+      data-tip={tip}
       aria-label={label}
       disabled={disabled}
       onClick={onClick}
@@ -77,7 +77,7 @@ export function Toolbar({
           <ToolButton
             testId="undo"
             label="Undo"
-            title="Undo (Ctrl/⌘+Z)"
+            tip="Undo last change"
             disabled={!canUndo}
             onClick={onUndo}
             icon={<IconUndo />}
@@ -85,7 +85,7 @@ export function Toolbar({
           <ToolButton
             testId="redo"
             label="Redo"
-            title="Redo (Ctrl/⌘+Shift+Z)"
+            tip="Redo last change"
             disabled={!canRedo}
             onClick={onRedo}
             icon={<IconRedo />}
@@ -93,28 +93,28 @@ export function Toolbar({
           <ToolButton
             testId="auto-fill"
             label="Auto-fill 1-9"
-            title="Auto-fill 1-9 center marks"
+            tip="Auto-fill 1–9 center marks"
             onClick={onAutoFill}
             icon={<IconPencil />}
           />
           <ToolButton
             testId="clear-invalid"
             label="Clear invalid marks"
-            title="Clear invalid marks"
+            tip="Clear invalid marks"
             onClick={onClearInvalid}
             icon={<IconAlert />}
           />
           <ToolButton
             testId="clear-corners"
             label="Clear corner marks"
-            title="Clear corner marks"
+            tip="Clear corner marks"
             onClick={onClearCorners}
             icon={<IconCorners />}
           />
           <ToolButton
             testId="clear-centers"
             label="Clear center marks"
-            title="Clear center marks"
+            tip="Clear center marks"
             onClick={onClearCenters}
             icon={<IconCenter />}
           />

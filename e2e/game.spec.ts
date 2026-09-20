@@ -421,13 +421,14 @@ test.describe('board link (debug)', () => {
 });
 
 test.describe('keyboard help', () => {
-  test('documents the mode shortcuts (V / C / M)', async ({ page }) => {
+  test('shortcuts panel is always expanded and documents V / C / M', async ({ page }) => {
     await page.goto('/');
-    await page.locator('.keyboard-help summary').click();
     const help = page.locator('.keyboard-help');
+    // Kept expanded by default — no click needed to see the shortcuts.
+    await expect(help).toHaveAttribute('open', '');
+    await expect(help.locator('ul')).toBeVisible();
     await expect(help).toContainText('V');
     await expect(help).toContainText('C');
     await expect(help).toContainText('M');
-    await expect(page.locator('.keyboard-hint')).toContainText('V/C/M');
   });
 });

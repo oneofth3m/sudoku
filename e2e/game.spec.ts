@@ -382,6 +382,23 @@ test.describe('keypad remaining counts', () => {
     await page.getByTestId('key-1').click();
     await expect(page.getByTestId('remaining-1')).toHaveText(String(9 - countOf(1) - 1));
   });
+
+  test('a fully placed digit shows a green zero badge', async ({ page }) => {
+    const solution = sampleSolution(7);
+    // Grid with every 1 already placed (matching the solution) and nothing else.
+    const puzzle = solution.map((row) => row.map((v) => (v === 1 ? 1 : 0)));
+    await gotoPuzzle(page, puzzle, solution);
+
+    // The 1 key is finished: zero badge turns solid green, not red.
+    await expect(page.locator('[data-testid="key-1"]')).toHaveClass(/zero/);
+    await expect(page.getByTestId('remaining-1')).toHaveText('0');
+    await expect(page.getByTestId('remaining-1')).toHaveCSS('background-color', 'rgb(23, 138, 75)');
+
+    // A digit still missing keeps the neutral badge.
+    await expect(page.locator('[data-testid="key-2"]')).not.toHaveClass(/zero/);
+    await expect(page.getByTestId('remaining-2')).toHaveText('9');
+    await expect(page.getByTestId('remaining-2')).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+  });
 });
 
 test.describe('board link (debug)', () => {

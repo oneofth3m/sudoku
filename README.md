@@ -47,8 +47,9 @@ desktop and mobile sizes.
   marks). The corner button shows a tiny 3×3 digit grid; the center button
   shows `123`. Switch modes with **V**, **C**, **M** on the keyboard.
 - The keypad shows a small counter on each digit key: how many more of that
-  number are still missing from the board (9 − placed). It turns into a red
-  badge at 0. The bottom bar (⌫) erases the selected cell.
+  number are still missing from the board (9 − placed). It turns into a green
+  badge at 0 once all nine are placed. The bottom bar (⌫) erases the selected
+  cell.
 - The toolbar is icon-based: **↶ / ↷** undo and redo, **✎** auto-fill 1–9,
   **⚠** clear invalid marks, **▦** clear corner marks, **◉** clear center marks —
   hover any icon for its tooltip. The segmented **Easy / Medium / Hard / Expert**

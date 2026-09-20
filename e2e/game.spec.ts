@@ -38,13 +38,13 @@ test.describe('board rendering', () => {
     expect(easyGivens).toBeLessThanOrEqual(47);
 
     // Switching difficulty starts a new game with a plausibly matching count.
-    await page.getByTestId('difficulty').selectOption('hard');
+    await page.getByTestId('difficulty-option-hard').click();
     await expect(page.locator('.cell')).toHaveCount(81);
     const hardGivens = await page.locator('.cell.given').count();
     expect(hardGivens).toBeGreaterThanOrEqual(25);
     expect(hardGivens).toBeLessThanOrEqual(32);
 
-    await page.getByTestId('difficulty').selectOption('expert');
+    await page.getByTestId('difficulty-option-expert').click();
     await expect(page.locator('.cell')).toHaveCount(81);
     const expertGivens = await page.locator('.cell.given').count();
     expect(expertGivens).toBeGreaterThanOrEqual(20);

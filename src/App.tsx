@@ -6,11 +6,12 @@ import { Toolbar } from './components/Toolbar';
 import { WinOverlay } from './components/WinOverlay';
 import { createCells } from './engine/cells';
 import { generatePuzzle } from './engine/generator';
-import { DIFFICULTY_LABELS, type Difficulty, type Grid } from './engine/types';
+import { type Difficulty, type Grid } from './engine/types';
 import { decodeBoardLink, encodeBoardLink } from './state/boardLink';
 import { useGame } from './hooks/useGame';
 import { useKeyboard } from './hooks/useKeyboard';
 import type { GameState } from './state/types';
+import { IconCopy, IconLink } from './components/icons';
 
 const BEST_KEY = 'sudoku.best';
 
@@ -206,7 +207,6 @@ export default function App() {
     <div className="app">
       <header className="app-header">
         <h1 className="app-title">Sudoku</h1>
-        <span className="app-subtitle">{DIFFICULTY_LABELS[state.difficulty]}</span>
       </header>
 
       <Toolbar
@@ -217,23 +217,17 @@ export default function App() {
         onRedo={() => dispatch({ type: 'REDO' })}
         canUndo={state.history.length > 0 && state.status !== 'won'}
         canRedo={state.future.length > 0 && state.status !== 'won'}
-        mode={state.mode}
-        onModeChange={onModeChange}
         onAutoFill={() => dispatch({ type: 'FILL_ALL_MARKS' })}
         onClearInvalid={() => dispatch({ type: 'CLEAR_INVALID_MARKS' })}
         onClearCorners={() => dispatch({ type: 'CLEAR_CORNER_MARKS' })}
         onClearCenters={() => dispatch({ type: 'CLEAR_CENTER_MARKS' })}
-        boardLink={boardLink}
-        copied={copied}
-        onCopyBoardLink={copyBoardLink}
       />
 
       <StatusBar elapsed={state.elapsed} moves={state.moves} best={best[state.difficulty]} />
 
       {state.status === 'playing' && boardFull && (
         <div className="incomplete-banner" data-testid="incomplete-banner">
-          The board is full, but it isn&apos;t solved yet — some numbers don&apos;t match the solution.
-          Check the cells highlighted in red.
+          The board is full, but some numbers don&apos;t match the solution — check the red cells.
         </div>
       )}
 
@@ -242,19 +236,49 @@ export default function App() {
           <Board cells={state.cells} solution={state.solution} selected={state.selected} onSelect={onSelect} />
         </div>
         <div className="controls">
-          <Keypad mode={state.mode} remaining={remaining} onDigit={pressDigit} onErase={erase} />
-          <p className="keyboard-hint">Keyboard: 1-9 enter · 0/Backspace erase · arrows move · V/C/M switch mode</p>
+          <Keypad
+            mode={state.mode}
+            remaining={remaining}
+            onDigit={pressDigit}
+            onErase={erase}
+            onModeChange={onModeChange}
+          />
           <details className="keyboard-help">
-            <summary>Keyboard shortcuts</summary>
+            <summary>Shortcuts</summary>
             <ul>
-              <li><b>1–9</b> — enter / toggle that digit in the current mode</li>
-              <li><b>0</b>, <b>Backspace</b>, <b>Delete</b> — erase the selected cell</li>
-              <li><b>Arrow keys</b> — move the selection</li>
-              <li><b>V</b> — value mode · <b>C</b> — corner marks · <b>M</b> — center marks</li>
+              <li><b>1–9</b> enter / toggle the digit in the current mode</li>
+              <li><b>0 / ⌫</b> erase the selected cell</li>
+              <li><b>←↑↓→</b> move the selection</li>
+              <li><b>V</b> value · <b>C</b> corner · <b>M</b> center</li>
             </ul>
           </details>
         </div>
       </div>
+
+      <details className="board-link">
+        <summary>
+          <IconLink /> Board link
+        </summary>
+        <div className="board-link-row">
+          <input
+            className="board-link-input"
+            type="text"
+            readOnly
+            value={boardLink}
+            data-testid="board-link"
+            aria-label="Board link"
+          />
+          <button type="button" className="btn btn-ghost" data-testid="copy-board-link" onClick={copyBoardLink}>
+            <IconCopy />
+            <span>{copied ? 'Copied' : 'Copy'}</span>
+          </button>
+          {copied && (
+            <span className="copied-hint" data-testid="copied-hint">
+              Copied ✓
+            </span>
+          )}
+        </div>
+      </details>
 
       {state.status === 'won' && (
         <WinOverlay

@@ -32,7 +32,7 @@ One-time browser setup for e2e tests: `npx playwright install chromium`.
   auto-fill + invalid highlighting + clear-invalid, undo/redo, conflict
   highlighting, the full win flow, and the timer/stats. Tests inject exact
   puzzles through the `#puzzle=` hash so they never depend on randomness.
-- Coverage: ~98% statements, ~99% lines across the engine and state layer
+- Coverage: ~97% statements, ~99% lines across the engine and state layer
   (see `npm run coverage`).
 
 There is also `node scripts/layout-check.mjs` (run with the preview server up)
@@ -46,14 +46,17 @@ desktop and mobile sizes.
 - **Input modes**: `1` (value), `123` (corner pencil marks), `123` (center
   marks). The corner button shows a tiny 3×3 digit grid; the center button
   shows `123`. Switch modes with **V**, **C**, **M** on the keyboard.
-- The keypad shows a count under each digit: how many more of that number are
-  still missing from the board (9 − placed). It turns red at 0.
-- **Auto-fill 1-9** fills every empty cell with all 1–9 center marks — marks that
+- The keypad shows a small counter on each digit key: how many more of that
+  number are still missing from the board (9 − placed). It turns into a red
+  badge at 0. The bottom bar (⌫) erases the selected cell.
+- The toolbar is icon-based: **↶ / ↷** undo and redo, **✎** auto-fill 1–9,
+  **⚠** clear invalid marks, **▦** clear corner marks, **◉** clear center marks —
+  hover any icon for its tooltip. The segmented **Easy / Medium / Hard / Expert**
+  control starts a new game at that difficulty, as does **New game**.
+- **Auto-fill (✎)** fills every empty cell with all 1–9 center marks — marks that
   conflict with an already-resolved number in the cell's row/column/box are
-  highlighted in red.
-- **Clear invalid marks** removes exactly those invalid marks from every cell.
-- **Clear corner marks / Clear center marks** wipe only that one mark type across
-  the whole board (each is a single undoable step).
+  highlighted in red; **⚠ / ▦ / ◉** clear exactly that kind of mark
+  board-wide (each is a single undoable step).
 - **Undo / Redo** step through value *and* mark changes (history limit: 200).
 - Placing a value auto-prunes that number from the marks of its peers.
 - Marks never overflow the cell: corner marks stay in the outer ring and center
@@ -71,7 +74,7 @@ desktop and mobile sizes.
   unique solution — the timer stops and your best time per difficulty is saved
   in `localStorage` (`sudoku.best`). If you fill the board but a number is
   wrong, a banner tells you the board isn't solved yet.
-- **Board link (debug)**: the toolbar's "Board link" section shows a `#puzzle=`
+- **Board link**: the "Board link" section below the board shows a `#puzzle=`
   URL that uniquely identifies the current board; the Copy button puts it on the
   clipboard, and opening it reproduces the exact same puzzle.
 - **Keyboard**: `1–9` enter/toggle digits · `0` / `Backspace` / `Delete` erase ·

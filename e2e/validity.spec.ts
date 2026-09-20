@@ -18,7 +18,7 @@ test.describe('generated-board validity', () => {
     test(`${label}: a board generated in the browser is valid and uniquely solvable`, async ({ page }) => {
       await page.goto('/');
       if (difficulty !== 'easy') {
-        await page.getByTestId('difficulty').selectOption(difficulty);
+        await page.getByTestId(`difficulty-option-${difficulty}`).click();
       }
 
       const puzzle = await page.evaluate((): number[][] => {

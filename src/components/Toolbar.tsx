@@ -1,5 +1,5 @@
-import { ALL_NUMBERS, DIFFICULTIES, DIFFICULTY_LABELS, type Difficulty } from '../engine/types';
-import type { InputMode } from '../state/types';
+import { DIFFICULTIES, DIFFICULTY_LABELS, type Difficulty } from '../engine/types';
+import { IconAlert, IconCenter, IconCorners, IconPencil, IconRedo, IconRefresh, IconUndo } from './icons';
 
 interface ToolbarProps {
   difficulty: Difficulty;
@@ -9,22 +9,36 @@ interface ToolbarProps {
   onRedo: () => void;
   canUndo: boolean;
   canRedo: boolean;
-  mode: InputMode;
-  onModeChange: (m: InputMode) => void;
   onAutoFill: () => void;
   onClearInvalid: () => void;
   onClearCorners: () => void;
   onClearCenters: () => void;
-  boardLink: string;
-  copied: boolean;
-  onCopyBoardLink: () => void;
 }
 
-const MODES: { id: InputMode; title: string; label?: string }[] = [
-  { id: 'value', title: 'Value (V)', label: '1' },
-  { id: 'corner', title: 'Corner marks (C)' },
-  { id: 'center', title: 'Center marks (M)', label: '123' },
-];
+interface ToolButtonProps {
+  testId: string;
+  label: string;
+  title: string;
+  disabled?: boolean;
+  onClick: () => void;
+  icon: React.ReactNode;
+}
+
+function ToolButton({ testId, label, title, disabled, onClick, icon }: ToolButtonProps) {
+  return (
+    <button
+      type="button"
+      className="icon-btn"
+      data-testid={testId}
+      title={title}
+      aria-label={label}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      {icon}
+    </button>
+  );
+}
 
 export function Toolbar({
   difficulty,
@@ -34,111 +48,85 @@ export function Toolbar({
   onRedo,
   canUndo,
   canRedo,
-  mode,
-  onModeChange,
   onAutoFill,
   onClearInvalid,
   onClearCorners,
   onClearCenters,
-  boardLink,
-  copied,
-  onCopyBoardLink,
 }: ToolbarProps) {
   return (
     <div className="toolbar">
       <div className="toolbar-row">
-        <select
-          data-testid="difficulty"
-          className="select"
-          value={difficulty}
-          onChange={(e) => onDifficultyChange(e.target.value as Difficulty)}
-        >
+        <div className="segmented" role="group" aria-label="Difficulty" data-testid="difficulty">
           {DIFFICULTIES.map((d) => (
-            <option key={d} value={d}>
-              {DIFFICULTY_LABELS[d]}
-            </option>
-          ))}
-        </select>
-        <button type="button" className="btn btn-primary" data-testid="new-game" onClick={onNewGame}>
-          New game
-        </button>
-      </div>
-
-      <div className="toolbar-row">
-        <div className="mode-toggle" role="group" aria-label="Input mode">
-          {MODES.map((m) => (
             <button
-              key={m.id}
+              key={d}
               type="button"
-              className={mode === m.id ? 'mode-btn active' : 'mode-btn'}
-              data-testid={`mode-${m.id}`}
-              onClick={() => onModeChange(m.id)}
-              title={m.title}
-              aria-pressed={mode === m.id}
+              className={d === difficulty ? 'seg-btn active' : 'seg-btn'}
+              data-testid={`difficulty-option-${d}`}
+              aria-pressed={d === difficulty}
+              onClick={() => onDifficultyChange(d)}
             >
-              {m.id === 'corner' ? (
-                <span className="mini-grid" aria-hidden="true">
-                  {ALL_NUMBERS.map((n) => (
-                    <i key={n}>{n}</i>
-                  ))}
-                </span>
-              ) : (
-                m.label
-              )}
+              {DIFFICULTY_LABELS[d]}
             </button>
           ))}
-          <span className="mode-label">
-            {mode === 'value' ? 'Value (V)' : mode === 'corner' ? 'Corner marks (C)' : 'Center marks (M)'}
-          </span>
         </div>
-      </div>
 
-      <div className="toolbar-row wrap">
-        <button type="button" className="btn" data-testid="undo" onClick={onUndo} disabled={!canUndo}>
-          Undo
-        </button>
-        <button type="button" className="btn" data-testid="redo" onClick={onRedo} disabled={!canRedo}>
-          Redo
-        </button>
-        <button type="button" className="btn" data-testid="auto-fill" onClick={onAutoFill}>
-          Auto-fill 1-9
-        </button>
-        <button type="button" className="btn" data-testid="clear-invalid" onClick={onClearInvalid}>
-          Clear invalid marks
-        </button>
-        <button type="button" className="btn" data-testid="clear-corners" onClick={onClearCorners}>
-          Clear corner marks
-        </button>
-        <button type="button" className="btn" data-testid="clear-centers" onClick={onClearCenters}>
-          Clear center marks
-        </button>
-      </div>
+        <span className="toolbar-divider" aria-hidden="true" />
 
-      <details className="board-link">
-        <summary>Board link (debug)</summary>
-        <div className="board-link-row">
-          <input
-            className="board-link-input"
-            type="text"
-            readOnly
-            value={boardLink}
-            data-testid="board-link"
-            aria-label="Board link"
+        <div className="toolbar-tools" role="group" aria-label="Game tools">
+          <ToolButton
+            testId="undo"
+            label="Undo"
+            title="Undo (Ctrl/⌘+Z)"
+            disabled={!canUndo}
+            onClick={onUndo}
+            icon={<IconUndo />}
           />
-          <button type="button" className="btn" data-testid="copy-board-link" onClick={onCopyBoardLink}>
-            Copy
-          </button>
-          {copied && (
-            <span className="copied-hint" data-testid="copied-hint">
-              Copied ✓
-            </span>
-          )}
+          <ToolButton
+            testId="redo"
+            label="Redo"
+            title="Redo (Ctrl/⌘+Shift+Z)"
+            disabled={!canRedo}
+            onClick={onRedo}
+            icon={<IconRedo />}
+          />
+          <ToolButton
+            testId="auto-fill"
+            label="Auto-fill 1-9"
+            title="Auto-fill 1-9 center marks"
+            onClick={onAutoFill}
+            icon={<IconPencil />}
+          />
+          <ToolButton
+            testId="clear-invalid"
+            label="Clear invalid marks"
+            title="Clear invalid marks"
+            onClick={onClearInvalid}
+            icon={<IconAlert />}
+          />
+          <ToolButton
+            testId="clear-corners"
+            label="Clear corner marks"
+            title="Clear corner marks"
+            onClick={onClearCorners}
+            icon={<IconCorners />}
+          />
+          <ToolButton
+            testId="clear-centers"
+            label="Clear center marks"
+            title="Clear center marks"
+            onClick={onClearCenters}
+            icon={<IconCenter />}
+          />
         </div>
-        <p className="board-link-note">
-          This link uniquely identifies the current board. Opening it loads the same puzzle
-          (used for sharing and debugging).
-        </p>
-      </details>
+
+        <span className="toolbar-spacer" aria-hidden="true" />
+
+        <button type="button" className="btn btn-primary" data-testid="new-game" onClick={onNewGame}>
+          <IconRefresh />
+          <span>New game</span>
+        </button>
+      </div>
     </div>
   );
 }

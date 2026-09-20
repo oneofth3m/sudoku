@@ -604,10 +604,12 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+/* A digit whose nine copies are all placed: the badge turns solid green —
+   'finished', not red, which would read as something being wrong. */
 .key.zero .key-rem {
   color: #fff;
-  background: var(--danger);
-  border-color: var(--danger);
+  background: var(--success);
+  border-color: var(--success);
 }
 
 .key.zero .key-digit {
